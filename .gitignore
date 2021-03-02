@@ -127,3 +127,12 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+HW/.eslintrc.json
+HW/Instructions/Javascript_Grading_Rubric.pdf
+HW/Instructions/README.md
+HW/Instructions/StarterCode/index.html
+HW/Instructions/StarterCode/static/css/style.css
+HW/Instructions/StarterCode/static/images/nasa.jpg
+HW/Instructions/StarterCode/static/images/ufo.svg
+HW/Instructions/StarterCode/static/js/app.js
+HW/Instructions/StarterCode/static/js/data.js
