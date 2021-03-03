@@ -1,23 +1,23 @@
 // from data.js
-//var tableData = data;
-var tableData = [{
-    datetime: "1/1/2010",
-    city: "benton",
-    state: "ar",
-    country: "us",
-    shape: "circle",
-    durationMinutes: "5 mins.",
-    comments: "4 bright green circles high in the sky going in circles then one bright green light at my front door."
-},
-{
-    datetime: "1/1/2010",
-    city: "bonita",
-    state: "ca",
-    country: "us",
-    shape: "light",
-    durationMinutes: "13 minutes",
-    comments: "Three bright red lights witnessed floating stationary over San Diego New Years Day 2010"
-}];
+// ##########################################
+// #             INITIAL STATE              #
+// ##########################################
+var tableData = data;
+var cleanedData = cleanData(tableData);
+
+// Get the table body element
+var tbody = d3.select("tbody");
+
+console.log(tableData);
+console.log(cleanedData);
+
+addTableData(tbody, cleanedData);
+
+
+
+// ##########################################
+// #              FUNCTIONS                 #
+// ##########################################
 
 // Change a string to title case for city names.
 function toTitleCase(str) {
@@ -27,28 +27,41 @@ function toTitleCase(str) {
 }
 
 // Clean the data so it looks nice
-var cleanTableData = tableData.map(element => {
-    return {
-        datetime: element.datetime.toString().toUpperCase(),
-        city: toTitleCase(element.city.toString()),
-        state: element.state.toString().toUpperCase(),
-        country: element.country.toString().toUpperCase(),
-        shape: toTitleCase(element.shape.toString()),
-        durationMinutes: element.durationMinutes,
-        comments: element.comments
-    };
-});
-
-// Insert Data into HTML
-var tbody = d3.select("tbody");
-
-cleanTableData.forEach((sighting) => {
-    var row = tbody.append("tr");
-    Object.entries(sighting).forEach(([key, value]) => {
-        var cell = row.append("td");
-        cell.text(value);
+function cleanData(dirtyData) {
+    return dirtyData.map(sighting => {
+        return {
+            datetime: new Date(sighting.datetime.toString()),
+            city: toTitleCase(sighting.city.toString()),
+            state: sighting.state.toString().toUpperCase(),
+            country: sighting.country.toString().toUpperCase(),
+            shape: toTitleCase(sighting.shape.toString()),
+            durationMinutes: sighting.durationMinutes,
+            comments: sighting.comments
+        };
     });
-});
+}
+
+// Add the data to the table in the HTML
+function addTableData(element, dataList) {
+    // Clear all the data first from the table body
+    element.html("");
+
+    // Add rows
+    dataList.forEach(sighting => {
+        var row = element.append("tr");
+        Object.entries(sighting).forEach(([key, value]) => {
+            // Format the date value
+            value = key === "datetime" ? value.toDateString() : value.toString();            
+            var cell = row.append("td");
+            cell.text(value);
+        });
+    });
+}
+
+
+// ##########################################
+// #                 FORM                   #
+// ##########################################
 
 // Select the button
 var button = d3.select("#filter-btn");
@@ -58,25 +71,29 @@ var form = d3.select("#filter-form");
 
 // Create event handlers for clicking the button or pressing the enter key
 button.on("click", runEnter);
-form.on("submit",runEnter);
+form.on("submit", runEnter);
 
 // Create the function to run for both events
 function runEnter() {
+    // Prevent the page from refreshing
+    d3.event.preventDefault();
 
-  // Prevent the page from refreshing
-  d3.event.preventDefault();
+    // Select the input element and get the raw HTML node
+    var dateElement = d3.select("#datetime");
 
-  // Select the input element and get the raw HTML node
-  var inputElement = d3.select("#datetime");
+    // Get the value property of the input element
+    var dateValue = new Date(dateElement.property("value"));
 
-  // Get the value property of the input element
-  var inputValue = inputElement.property("value");
+    // Print the value to the console
+    console.log(dateValue);
 
-  // Print the value to the console
-  console.log(inputValue);
+    // Set the span tag in the h1 element to the text
+    // that was entered in the form
+    // d3.select("h1>span").text(inputValue);
+    // FILTER THE DATA
+    var tbody = d3.select("tbody");
 
-  // Set the span tag in the h1 element to the text
-  // that was entered in the form
-  // d3.select("h1>span").text(inputValue);
-  // FILTER THE DATA
+    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= dateValue);
+
+    addTableData(tbody, filteredTableData);
 }
