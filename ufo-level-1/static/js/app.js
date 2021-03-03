@@ -78,14 +78,26 @@ function runEnter() {
     // Prevent the page from refreshing
     d3.event.preventDefault();
 
-    // Select the input element and get the raw HTML node
-    var dateElement = d3.select("#datetime");
+    // Select the input elements and get the raw HTML node
+    var startDate = d3.select("#filter-start-date");
+    var endDate = d3.select("#filter-end-date");
+    var city = d3.select("#filter-city");
+    var country = d3.select("#filter-country");
+    var shape = d3.select("#filter-shape");
 
-    // Get the value property of the input element
-    var dateValue = new Date(dateElement.property("value"));
+    // Get the value property of the input elements
+    var startDateVal = new Date(startDate.property("value"));
+    var endDateVal = new Date(endDate.property("value"));
+    var cityeVal = city.property("value");
+    var countryeVal = country.property("value");
+    var shapeVal = shape.property("value");
 
-    // Print the value to the console
-    console.log(dateValue);
+    // Print the values to the console
+    console.log(startDateVal);
+    console.log(endDateVal);
+    console.log(cityeVal);
+    console.log(countryeVal);
+    console.log(shapeVal);
 
     // Set the span tag in the h1 element to the text
     // that was entered in the form
@@ -93,7 +105,7 @@ function runEnter() {
     // FILTER THE DATA
     var tbody = d3.select("tbody");
 
-    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= dateValue);
+    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= startDateVal);
 
     addTableData(tbody, filteredTableData);
 }
