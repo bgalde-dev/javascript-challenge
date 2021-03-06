@@ -78,6 +78,9 @@ function runEnter() {
     // Prevent the page from refreshing
     d3.event.preventDefault();
 
+    // No filters
+    filteredTableData = cleanedData
+
     // Select the input elements and get the raw HTML node
     var startDate = d3.select("#filter-start-date");
     var endDate = d3.select("#filter-end-date");
@@ -85,9 +88,12 @@ function runEnter() {
     var country = d3.select("#filter-country");
     var shape = d3.select("#filter-shape");
 
-    // Get the value property of the input elements
+    // Get the value property of the input elements, vaildate and filter
     var startDateVal = new Date(startDate.property("value"));
     var endDateVal = new Date(endDate.property("value"));
+    
+    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= startDateVal);
+
     var cityeVal = city.property("value");
     var countryeVal = country.property("value");
     var shapeVal = shape.property("value");
@@ -99,13 +105,9 @@ function runEnter() {
     console.log(countryeVal);
     console.log(shapeVal);
 
-    // Set the span tag in the h1 element to the text
-    // that was entered in the form
-    // d3.select("h1>span").text(inputValue);
     // FILTER THE DATA
     var tbody = d3.select("tbody");
 
-    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= startDateVal);
 
     addTableData(tbody, filteredTableData);
 }
