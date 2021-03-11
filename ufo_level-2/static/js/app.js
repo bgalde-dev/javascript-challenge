@@ -1,16 +1,38 @@
-// from data.js
 // ##########################################
 // #             INITIAL STATE              #
 // ##########################################
+
+// Raw data from data.js
 var tableData = data;
+
+// Clean up data to make it pretty
 var cleanedData = cleanData(tableData);
 
 // Get the table body element
 var tbody = d3.select("tbody");
-const cities = new Set();
-const countries = new Set();
-const shapes = new Set();
-createDropDowns(cleanedData);
+
+// Get the data for the drop downs. Used Sets so there are no dups.
+const cities = new Set([""]);
+const states = new Set([""]);
+const countries = new Set([""]);
+const shapes = new Set([""]);
+
+// Populate the data for the drop downs.
+cleanedData.forEach(element => {
+    cities.add(element.city);
+    states.add(element.state);
+    countries.add(element.country);
+    shapes.add(element.shape);
+});
+
+// Create the drop doen menus
+var selectFilters = ['city', 'state', 'country', 'shape'];
+selectFilters.forEach(element => {
+    createDropDown(element);
+});
+
+
+// Create the inital table with all data.
 addTableData(tbody, cleanedData);
 
 // ##########################################
@@ -24,15 +46,33 @@ function toTitleCase(str) {
     });
 }
 
-function createDropDowns(data) {
-    data.forEach(element => {
-        cities.add(element.city);
-        countries.add(element.country);
-        shapes.add(element.shape);
-    });
-    console.log(Array.from(cities).sort());
-    console.log(Array.from(countries).sort());
-    console.log(Array.from(shapes).sort());
+// Creates a single dropdown menu base on a given string
+function createDropDown(element) {
+    var mySelect = document.getElementById("filter-" + element);
+    var myArray = [];
+    switch (element) {
+        case "city":
+            myArray = Array.from(cities).sort();
+            break;
+        case "state":
+            myArray = Array.from(states).sort();
+            break;
+        case "country":
+            myArray = Array.from(countries).sort();
+            break;
+        case "shape":
+            myArray = Array.from(shapes).sort();
+            break;
+        default:
+            break;
+    }
+
+    for (var i = 0; i < myArray.length; i++) {
+        var option = document.createElement("option");
+        option.text = myArray[i];
+        option.value = myArray[i];
+        mySelect.appendChild(option);
+    }
 }
 
 // Clean the data so it looks nice
@@ -73,14 +113,22 @@ function addTableData(element, dataList) {
 // ##########################################
 
 // Select the button
-var button = d3.select("#filter-btn");
+var filterButton = d3.select("#filter-btn");
+var resetButton = d3.select("#reset-btn");
 
 // Select the form
 var form = d3.select("#filter-form");
 
 // Create event handlers for clicking the button or pressing the enter key
-button.on("click", runEnter);
+filterButton.on("click", runEnter);
 form.on("submit", runEnter);
+resetButton.on("click", resetForm);
+
+// Resets all the filters
+function resetForm() {
+    document.getElementById("filter-form").reset();
+    runEnter();
+ }
 
 // Create the function to run for both events
 function runEnter() {
@@ -105,12 +153,6 @@ function runEnter() {
     var stateVal = state.property("value").toUpperCase();
     var countryVal = country.property("value").toUpperCase();
     var shapeVal = shape.property("value").toUpperCase();
-    console.log(startDateVal);
-    console.log(endDateVal);
-    console.log(cityVal);
-    console.log(stateVal);
-    console.log(countryVal);
-    console.log(shapeVal);
 
     filteredTableData = startDateVal ? filteredTableData.filter(sighting => sighting.datetime.getTime() >= startDateVal.getTime()) : filteredTableData;
     filteredTableData = endDateVal ? filteredTableData.filter(sighting => sighting.datetime.getTime() <= endDateVal.getTime()) : filteredTableData;
