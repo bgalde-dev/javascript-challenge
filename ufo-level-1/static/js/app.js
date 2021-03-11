@@ -1,4 +1,4 @@
-// from data.js
+ // from data.js
 // ##########################################
 // #             INITIAL STATE              #
 // ##########################################
@@ -8,8 +8,8 @@ var cleanedData = cleanData(tableData);
 // Get the table body element
 var tbody = d3.select("tbody");
 
-console.log(tableData);
-console.log(cleanedData);
+//console.log(tableData);
+//console.log(cleanedData);
 
 addTableData(tbody, cleanedData);
 
@@ -78,36 +78,20 @@ function runEnter() {
     // Prevent the page from refreshing
     d3.event.preventDefault();
 
-    // No filters
-    filteredTableData = cleanedData
-
     // Select the input elements and get the raw HTML node
     var startDate = d3.select("#filter-start-date");
-    var endDate = d3.select("#filter-end-date");
-    var city = d3.select("#filter-city");
-    var country = d3.select("#filter-country");
-    var shape = d3.select("#filter-shape");
 
     // Get the value property of the input elements, vaildate and filter
     var startDateVal = new Date(startDate.property("value"));
-    var endDateVal = new Date(endDate.property("value"));
-    
-    filteredTableData = cleanedData.filter(sighting => sighting.datetime >= startDateVal);
 
-    var cityeVal = city.property("value");
-    var countryeVal = country.property("value");
-    var shapeVal = shape.property("value");
+    var filteredTableData = cleanedData;
+
+    if (startDateVal) {
+        filteredTableData = cleanedData.filter(sighting => sighting.datetime.getTime() == startDateVal.getTime());
+    }
 
     // Print the values to the console
     console.log(startDateVal);
-    console.log(endDateVal);
-    console.log(cityeVal);
-    console.log(countryeVal);
-    console.log(shapeVal);
-
-    // FILTER THE DATA
-    var tbody = d3.select("tbody");
-
 
     addTableData(tbody, filteredTableData);
 }
