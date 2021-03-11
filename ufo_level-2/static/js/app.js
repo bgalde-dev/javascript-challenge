@@ -1,4 +1,4 @@
- // from data.js
+// from data.js
 // ##########################################
 // #             INITIAL STATE              #
 // ##########################################
@@ -30,9 +30,9 @@ function createDropDowns(data) {
         countries.add(element.country);
         shapes.add(element.shape);
     });
-    console.log(Array.from(cities).sort() );
-    console.log(Array.from(countries).sort() );
-    console.log(Array.from(shapes).sort() );
+    console.log(Array.from(cities).sort());
+    console.log(Array.from(countries).sort());
+    console.log(Array.from(shapes).sort());
 }
 
 // Clean the data so it looks nice
@@ -60,7 +60,7 @@ function addTableData(element, dataList) {
         var row = element.append("tr");
         Object.entries(sighting).forEach(([key, value]) => {
             // Format the date value
-            value = key === "datetime" ? value.toDateString() : value.toString();            
+            value = key === "datetime" ? value.toDateString() : value.toString();
             var cell = row.append("td");
             cell.text(value);
         });
@@ -94,40 +94,30 @@ function runEnter() {
     var startDate = d3.select("#filter-start-date");
     var endDate = d3.select("#filter-end-date");
     var city = d3.select("#filter-city");
+    var state = d3.select("#filter-state");
     var country = d3.select("#filter-country");
     var shape = d3.select("#filter-shape");
 
     // Get the value property of the input elements, vaildate and filter
-    var startDateVal = new Date(startDate.property("value"));
-    var endDateVal = new Date(endDate.property("value"));
+    var startDateVal = startDate.property("value") ? new Date(startDate.property("value")) : false;
+    var endDateVal = endDate.property("value") ? new Date(endDate.property("value")) : false;
     var cityVal = city.property("value").toUpperCase();
+    var stateVal = state.property("value").toUpperCase();
     var countryVal = country.property("value").toUpperCase();
-    var shapeVal = shape.property("value").toUpperCase();   
+    var shapeVal = shape.property("value").toUpperCase();
     console.log(startDateVal);
     console.log(endDateVal);
     console.log(cityVal);
+    console.log(stateVal);
     console.log(countryVal);
     console.log(shapeVal);
 
-    if (shapeVal) {
-        console.log("shapeVal is true");
-    } else {
-        console.log("shapeVal is false");
-    }
-
-    filteredTableData = startDateVal ? cleanedData.filter(sighting => sighting.datetime.getTime() >= startDateVal.getTime()) : filteredTableData;
-    console.log(filteredTableData);
-    filteredTableData = endDateVal ? cleanedData.filter(sighting => sighting.datetime.getTime() <= endDateVal.getTime()) : filteredTableData;
-    console.log(filteredTableData);
-    filteredTableData = cityVal ? cleanedData.filter(sighting => sighting.city.toUpperCase() >= cityVal) : filteredTableData;
-    console.log(filteredTableData);
-    filteredTableData = countryVal ? cleanedData.filter(sighting => sighting.country.toUpperCase() === countryVal) : filteredTableData;
-    console.log(filteredTableData);
-    filteredTableData = shapeVal ? cleanedData.filter(sighting => sighting.shape.toUpperCase() === shapeVal) : filteredTableData;
-    console.log(filteredTableData);
-
-    // Print the values to the console
-
+    filteredTableData = startDateVal ? filteredTableData.filter(sighting => sighting.datetime.getTime() >= startDateVal.getTime()) : filteredTableData;
+    filteredTableData = endDateVal ? filteredTableData.filter(sighting => sighting.datetime.getTime() <= endDateVal.getTime()) : filteredTableData;
+    filteredTableData = cityVal ? filteredTableData.filter(sighting => sighting.city.toUpperCase() === cityVal) : filteredTableData;
+    filteredTableData = stateVal ? filteredTableData.filter(sighting => sighting.state.toUpperCase() === stateVal) : filteredTableData;
+    filteredTableData = countryVal ? filteredTableData.filter(sighting => sighting.country.toUpperCase() === countryVal) : filteredTableData;
+    filteredTableData = shapeVal ? filteredTableData.filter(sighting => sighting.shape.toUpperCase() === shapeVal) : filteredTableData;
 
     addTableData(tbody, filteredTableData);
 }
