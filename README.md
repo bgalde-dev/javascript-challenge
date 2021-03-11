@@ -10,8 +10,8 @@ UFO sightings and creating filters for many of the fields.
 Level 1 is a basic filter of just finding and filtering based on a single date.
 
 * [index.html](./ufo-level-1/index.html) the page with the basic filter.
-* [app.js](./static/js/ufo-level-1/app.js) has the Javascript logic to build and run the page.
-* [data.js](./static/js/ufo-level-1/data.js) has the data for the UFO sittings.
+* [app.js](./ufo-level-1/static/js/app.js) has the Javascript logic to build and run the page.
+* [data.js](./ufo-level-1/static/js/data.js) has the data for the UFO sittings.
 ### Level 2
 Level 2 is a more advanced filter. This will allow you to search a range of dates, city, state,
 country, and shape. Other than the dates all the other fields are drop downs to select based on the data.
@@ -20,6 +20,6 @@ validation is done on the form. Additionally there is a reset button to clear th
 
 
 * [index.html](./ufo-level-2/index.html) the page with the advanced filter.
-* [app.js](./static/js/ufo-level-2/app.js) has the Javascript logic to build and run the page.
-* [data.js](./static/js/ufo-level-2/data.js) has the data for the UFO sittings.
+* [app.js](./ufo-level-2/static/js/app.js) has the Javascript logic to build and run the page.
+* [data.js](./ufo-level-2/static/js/data.js) has the data for the UFO sittings.
 
